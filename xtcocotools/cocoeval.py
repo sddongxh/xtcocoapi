@@ -339,6 +339,8 @@ class COCOeval:
                 g = np.array(gt['lefthand_kpts'])
             elif p.iouType == 'keypoints_righthand':
                 g = np.array(gt['righthand_kpts'])
+            elif p.iouType == 'keypoints_wholebody_goliath':
+                g = np.array(gt['goliath_wholebody_kpts'])
             else:
                 g = np.array(gt['keypoints'])
 
@@ -364,6 +366,8 @@ class COCOeval:
                     d = np.array(dt['lefthand_kpts'])
                 elif p.iouType == 'keypoints_righthand':
                     d = np.array(dt['righthand_kpts'])
+                elif p.iouType == 'keypoints_wholebody_goliath':
+                    d = np.array(dt['goliath_wholebody_kpts'])
                 else:
                     d = np.array(dt['keypoints'])
 

@@ -157,7 +157,7 @@ class COCOeval:
                     k = np.count_nonzero(g[2::3] > 0)
                     self.score_key = 'lefthand_score'
                 elif p.iouType == 'keypoints_righthand':
-                    g = np.array(gt['righthand_kpts'])
+                    g = np.array(gt['righthand_kpts']) ## (3x20,)
                     k = np.count_nonzero(g[2::3] > 0)
                     self.score_key = 'righthand_score'
                 elif p.iouType == 'keypoints_crowd':
@@ -165,6 +165,12 @@ class COCOeval:
                     # the visible joints (vis = 2)
                     k = gt['num_keypoints']
                     self.score_key = 'score'
+                ## custom for internal evaluation
+                elif p.iouType == 'keypoints_wholebody_goliath':
+                    wholebody_goliath_gt = gt['goliath_wholebody_kpts'] ## (3x308, )
+                    g = np.array(wholebody_goliath_gt)
+                    k = np.count_nonzero(g[2::3] > 0)
+                    self.score_key = 'goliath_wholebody_score'
                 else:
                     g = np.array(gt['keypoints'])
                     k = np.count_nonzero(g[2::3] > 0)
@@ -211,7 +217,13 @@ class COCOeval:
                         dt[self.score_key] = dt['score']
                         flag_no_part_score = True
                 elif p.iouType == 'keypoints_righthand':
-                    d = np.array(dt['righthand_kpts'])
+                    d = np.array(dt['righthand_kpts']) ## (3x20,)
+                    k = np.count_nonzero(d[2::3] > 0)
+                    if self.score_key not in dt:
+                        dt[self.score_key] = dt['score']
+                        flag_no_part_score = True
+                elif p.iouType == 'keypoints_wholebody_goliath': ## custom for goliath
+                    d = np.array(dt['goliath_wholebody_kpts']) ## (3x308, )
                     k = np.count_nonzero(d[2::3] > 0)
                     if self.score_key not in dt:
                         dt[self.score_key] = dt['score']
